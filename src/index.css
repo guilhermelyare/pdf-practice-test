@@ -17,26 +17,53 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 217 91% 24%;
+    --primary-foreground: 0 0% 98%;
+    --primary-glow: 217 91% 35%;
 
     --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary-foreground: 217 91% 24%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 27 87% 67%;
+    --accent-foreground: 222.2 84% 4.9%;
+
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 98%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 222.2 84% 4.9%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --ring: 217 91% 24%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+
+    /* AEG Proteção Brand Colors */
+    --brand-blue: 217 91% 24%;
+    --brand-blue-light: 217 91% 35%;
+    --brand-orange: 27 87% 67%;
+    --brand-gray: 210 11% 71%;
+    
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(217 91% 24%), hsl(217 91% 35%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(210 40% 98%));
+    --gradient-accent: linear-gradient(135deg, hsl(27 87% 67%), hsl(27 87% 75%));
+    
+    /* Shadows */
+    --shadow-glow: 0 0 40px hsl(217 91% 35% / 0.3);
+    --shadow-card: 0 4px 20px hsl(217 91% 24% / 0.1);
+    --shadow-elegant: 0 10px 40px hsl(217 91% 24% / 0.15);
+    
+    /* Animation */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-spring: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 
     --sidebar-background: 0 0% 98%;
 
@@ -65,8 +92,9 @@ All colors MUST be HSL.
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 217 91% 35%;
+    --primary-foreground: 222.2 84% 4.9%;
+    --primary-glow: 217 91% 45%;
 
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
@@ -74,15 +102,34 @@ All colors MUST be HSL.
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 27 87% 67%;
+    --accent-foreground: 222.2 84% 4.9%;
+
+    --success: 142 71% 45%;
+    --success-foreground: 210 40% 98%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 222.2 84% 4.9%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --ring: 217 91% 35%;
+
+    --brand-blue: 217 91% 35%;
+    --brand-blue-light: 217 91% 45%;
+    --brand-orange: 27 87% 67%;
+    --brand-gray: 210 11% 71%;
+    
+    --gradient-hero: linear-gradient(135deg, hsl(217 91% 35%), hsl(217 91% 45%));
+    --gradient-card: linear-gradient(145deg, hsl(222.2 84% 4.9%), hsl(217.2 32.6% 17.5%));
+    --gradient-accent: linear-gradient(135deg, hsl(27 87% 67%), hsl(27 87% 75%));
+    
+    --shadow-glow: 0 0 40px hsl(217 91% 45% / 0.4);
+    --shadow-card: 0 4px 20px hsl(0 0% 0% / 0.3);
+    --shadow-elegant: 0 10px 40px hsl(0 0% 0% / 0.4);
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
