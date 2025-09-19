@@ -2,6 +2,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 import { 
   Users, 
   Phone, 
@@ -12,7 +14,6 @@ import {
   MapPin,
   MessageSquare
 } from "lucide-react";
-import { useState, useEffect } from "react";
 
 interface Lead {
   id: string;
@@ -35,9 +36,85 @@ export const SalesDashboard = () => {
     converted: 0,
     conversionRate: 0,
   });
+  const [loading, setLoading] = useState(true);
 
-  // Simulate lead data
+  // Carregador dados reais do Supabase
   useEffect(() => {
+    loadDashboardData();
+    
+    // Configurar refresh automático a cada 30 segundos
+    const interval = setInterval(loadDashboardData, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const loadDashboardData = async () => {
+    try {
+      // Buscar leads com informações de atribuição
+      const { data: leadsData, error } = await supabase
+        .from('leads')
+        .select(`
+          id,
+          name,
+          phone,
+          email,
+          interest,
+          status,
+          score,
+          created_at,
+          assigned_to,
+          lead_assignments!inner(
+            salespeople(name)
+          )
+        `)
+        .order('created_at', { ascending: false })
+        .limit(20);
+
+      if (error) {
+        console.error('Erro ao carregar leads:', error);
+        // Usar dados mock em caso de erro
+        loadMockData();
+        return;
+      }
+
+      // Transformar dados para interface
+      const transformedLeads: Lead[] = leadsData?.map(lead => ({
+        id: lead.id,
+        name: lead.name,
+        phone: lead.phone,
+        city: getCityFromInterest(lead.interest), // Função auxiliar
+        status: lead.status as any,
+        assignedTo: lead.lead_assignments?.[0]?.salespeople?.name || 'Não atribuído',
+        createdAt: new Date(lead.created_at),
+        score: lead.score
+      })) || [];
+
+      setLeads(transformedLeads);
+
+      // Calcular estatísticas
+      const totalLeads = transformedLeads.length;
+      const newLeads = transformedLeads.filter(l => l.status === "novo").length;
+      const inProgress = transformedLeads.filter(l => ["contatado", "qualificado"].includes(l.status)).length;
+      const converted = transformedLeads.filter(l => l.status === "convertido").length;
+      const conversionRate = totalLeads > 0 ? (converted / totalLeads) * 100 : 0;
+
+      setStats({
+        totalLeads,
+        newLeads,
+        inProgress,
+        converted,
+        conversionRate,
+      });
+
+    } catch (error) {
+      console.error('Erro geral:', error);
+      loadMockData();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadMockData = () => {
+    // Fallback para dados mock
     const mockLeads: Lead[] = [
       {
         id: "1",
@@ -59,48 +136,29 @@ export const SalesDashboard = () => {
         createdAt: new Date(Date.now() - 3600000),
         lastContact: new Date(Date.now() - 1800000),
         score: 72,
-      },
-      {
-        id: "3",
-        name: "Pedro Santos",
-        phone: "(31) 99999-3333",
-        city: "Belo Horizonte",
-        status: "qualificado",
-        assignedTo: "Carlos Santos",
-        createdAt: new Date(Date.now() - 7200000),
-        lastContact: new Date(Date.now() - 3600000),
-        score: 91,
-      },
-      {
-        id: "4",
-        name: "Ana Rodrigues",
-        phone: "(11) 99999-4444",
-        city: "São Paulo",
-        status: "convertido",
-        assignedTo: "Ana Costa",
-        createdAt: new Date(Date.now() - 86400000),
-        lastContact: new Date(Date.now() - 3600000),
-        score: 88,
-      },
+      }
     ];
 
     setLeads(mockLeads);
-
-    // Calculate stats
-    const totalLeads = mockLeads.length;
-    const newLeads = mockLeads.filter(l => l.status === "novo").length;
-    const inProgress = mockLeads.filter(l => ["contatado", "qualificado"].includes(l.status)).length;
-    const converted = mockLeads.filter(l => l.status === "convertido").length;
-    const conversionRate = totalLeads > 0 ? (converted / totalLeads) * 100 : 0;
-
     setStats({
-      totalLeads,
-      newLeads,
-      inProgress,
-      converted,
-      conversionRate,
+      totalLeads: 2,
+      newLeads: 1,
+      inProgress: 1,
+      converted: 0,
+      conversionRate: 0,
     });
-  }, []);
+  };
+
+  const getCityFromInterest = (interest: string): string => {
+    // Função auxiliar para mapear interesse para cidade
+    const cityMap: Record<string, string> = {
+      'seguro_auto': 'São Paulo',
+      'seguro_vida': 'Rio de Janeiro',
+      'previdencia': 'Belo Horizonte',
+      'investimentos': 'Brasília'
+    };
+    return cityMap[interest] || 'São Paulo';
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {

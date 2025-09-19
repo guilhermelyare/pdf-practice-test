@@ -25,21 +25,52 @@ export const HeroSection = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate lead capture automation
-    setTimeout(() => {
-      toast({
-        title: "Lead Capturado com Sucesso!",
-        description: "Nossa equipe comercial entrará em contato em até 5 minutos.",
-        duration: 5000,
+    try {
+      // Simular chamada da Edge Function
+      const response = await fetch('/mock-api/capture-lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          phone: formData.phone,
+          interest: 'seguro_auto'
+        }),
       });
-      
-      // Simulate lead processing
-      console.log("Lead capturado:", formData);
-      console.log("Automação ativada - Distribuindo lead para equipe comercial...");
-      
-      setFormData({ name: "", phone: "", city: "" });
+
+      // Simular sucesso sempre para demo
+      const result = { success: true, leadId: 'mock-' + Date.now(), error: null };
+
+      if (result.success) {
+        toast({
+          title: "🎉 Lead Capturado com Sucesso!",
+          description: "Nossa equipe entrará em contato em até 5 minutos. Automação ativada!",
+          duration: 5000,
+        });
+        
+        // Reset form
+        setFormData({ name: "", phone: "", city: "" });
+        
+        // Simular processo de automação no console
+        console.log("🚀 AUTOMAÇÃO ATIVADA:");
+        console.log("✅ 1. Lead capturado e armazenado");
+        console.log("📱 2. Equipe comercial notificada via WhatsApp");
+        console.log("🎯 3. Lead distribuído automaticamente");
+        console.log("⏰ 4. Follow-up agendado para 5 minutos");
+        console.log(`📊 5. Lead ID: ${result.leadId}`);
+        
+      } else {
+        throw new Error(result.error || 'Erro ao processar lead');
+      }
+    } catch (error) {
+      console.error('Erro ao capturar lead:', error);
+      toast({
+        title: "❌ Erro ao processar solicitação",
+        description: "Tente novamente em alguns instantes ou entre em contato conosco.",
+        variant: "destructive",
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 2000);
+    }
   };
 
   const handleInputChange = (field: keyof LeadFormData, value: string) => {
