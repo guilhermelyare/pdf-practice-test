@@ -69,7 +69,7 @@ serve(async (req) => {
       JSON.stringify({ 
         success: true, 
         leadId,
-        message: 'Lead capturado com sucesso! Entraremos em contato em breve.' 
+        message: 'Entraremos em contato em breve.' 
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
